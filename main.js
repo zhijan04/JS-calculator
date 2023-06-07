@@ -41,10 +41,9 @@ while (true) {
 
     // Preguntar al usuario si desea hacer otra operación
     let opcion = prompt("¿Desea realizar otra operación? (si/no)");{
-        if (opcion() === "no") {
+        if (opcion === "no") {
             break; // Sale del ciclo
         }
         else{ continue;}
     }
-
 }
