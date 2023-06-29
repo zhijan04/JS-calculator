@@ -14,10 +14,15 @@ function calcular(operador, num1, num2) {
     }
 }
 
-// Ciclo principal de la calculadora
-while (true) {
+function aplicarOperacion(array, operacion, num) {
+    return array.map(function (element) {
+        return operacion(element, num);
+    });
+}
+
+do {
     // Se solicita al usuario la operación y los números
-    let operacion = prompt("Ingrese que clase de operación quiere hacer (+, -, *, /):");
+    let operacion = prompt("Ingrese qué operación desea realizar (+, -, *, /):");
     let numero1 = parseFloat(prompt("Ingrese el primer número:"));
     let numero2 = parseFloat(prompt("Ingrese el segundo número:"));
 
@@ -27,23 +32,26 @@ while (true) {
         continue; // Vuelve al inicio del ciclo
     }
 
-    // Calcular el resultado usando la función calcular()
     let resultado = calcular(operacion, numero1, numero2);
 
-    // Verificar si la operación es válida
     if (isNaN(resultado)) {
         alert("Operación inválida. Por favor, ingrese un operador válido (+, -, *, /).");
         continue; // Vuelve al inicio del ciclo
     }
 
-    // Mostrar el resultado al usuario
     alert("El resultado es: " + resultado);
 
-    // Preguntar al usuario si desea hacer otra operación
-    let opcion = prompt("¿Desea realizar otra operación? (si/no)");{
-        if (opcion === "no") {
-            break; // Sale del ciclo
-        }
-        else{ continue;}
+    let numeros = [1, 2, 3, 4, 5];
+    let multiplicados = aplicarOperacion(numeros, function (elemento, num) {
+        return elemento * num;
+    }, numero1);
+
+    console.log("Array original:", numeros);
+    console.log("Array multiplicado por", numero1 + ":", multiplicados);
+
+    // Pregunta al usuario si desea hacer otra operación
+    let opcion = prompt("¿Desea realizar otra operación? (si/no)");
+    if (opcion.toLowerCase() !== "si") {
+        break; // Sale del ciclo
     }
-}
+} while (true);
