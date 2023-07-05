@@ -1,4 +1,3 @@
-// Función para realizar las operaciones
 function calcular(operador, num1, num2) {
     switch (operador) {
         case '+':
@@ -20,8 +19,10 @@ function aplicarOperacion(array, operacion, num) {
     });
 }
 
+let historial = []; // Array para almacenar el historial de cálculos
+
 do {
-    // Se solicita al usuario la operación y los números
+    // Se pide al usuario la operación y los números
     let operacion = prompt("Ingrese qué operación desea realizar (+, -, *, /):");
     let numero1 = parseFloat(prompt("Ingrese el primer número:"));
     let numero2 = parseFloat(prompt("Ingrese el segundo número:"));
@@ -29,25 +30,27 @@ do {
     // Verifica si los números son válidos
     if (isNaN(numero1) || isNaN(numero2)) {
         alert("Por favor, ingrese números válidos.");
-        continue; // Vuelve al inicio del ciclo
+        continue;
     }
 
     let resultado = calcular(operacion, numero1, numero2);
 
     if (isNaN(resultado)) {
         alert("Operación inválida. Por favor, ingrese un operador válido (+, -, *, /).");
-        continue; // Vuelve al inicio del ciclo
+        continue;
     }
 
     alert("El resultado es: " + resultado);
 
-    let numeros = [1, 2, 3, 4, 5];
-    let multiplicados = aplicarOperacion(numeros, function (elemento, num) {
-        return elemento * num;
-    }, numero1);
+    let calculo = numero1 + " " + operacion + " " + numero2 + " = " + resultado;
+    historial.push(calculo); // Agrega el cálculo al historial
 
-    console.log("Array original:", numeros);
-    console.log("Array multiplicado por", numero1 + ":", multiplicados);
+    document.write("<p>Historial de cálculos:</p>");
+    document.write("<ul>");
+    historial.forEach(function (calculo) {
+        document.write("<li>" + calculo + "</li>");
+    });
+    document.write("</ul>");
 
     // Pregunta al usuario si desea hacer otra operación
     let opcion = prompt("¿Desea realizar otra operación? (si/no)");
