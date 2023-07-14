@@ -9,52 +9,76 @@ function calcular(operador, num1, num2) {
         case '/':
             return num1 / num2;
         default:
-            return NaN; // Si el operador no es válido, devuelve NaN
+            return NaN;
     }
 }
 
-function aplicarOperacion(array, operacion, num) {
-    return array.map(function (element) {
-        return operacion(element, num);
-    });
+function guardarHistorialEnStorage(historial) {
+    localStorage.setItem('historialCalculos', JSON.stringify(historial));
 }
 
-let historial = []; // Array para almacenar el historial de cálculos
+function obtenerHistorialDesdeStorage() {
+    const historialJSON = localStorage.getItem('historialCalculos');
+    if (historialJSON) {
+        return JSON.parse(historialJSON);
+    }
+    return [];
+}
 
-do {
-    // Se pide al usuario la operación y los números
-    let operacion = prompt("Ingrese qué operación desea realizar (+, -, *, /):");
-    let numero1 = parseFloat(prompt("Ingrese el primer número:"));
-    let numero2 = parseFloat(prompt("Ingrese el segundo número:"));
+let historial = obtenerHistorialDesdeStorage();
 
-    // Verifica si los números son válidos
+function guardarHistorial() {
+    guardarHistorialEnStorage(historial);
+    Swal.fire('¡Éxito!', 'Historial guardado correctamente.', 'success');
+}
+
+function borrarHistorial() {
+    historial = [];
+    guardarHistorialEnStorage(historial);
+    const historialElement = document.getElementById('historial');
+    historialElement.innerHTML = '';
+    Swal.fire('¡Éxito!', 'Historial borrado correctamente.', 'success');
+}
+
+function realizarOperacion() {
+    const operacionInput = document.getElementById('operacion');
+    const numero1Input = document.getElementById('numero1');
+    const numero2Input = document.getElementById('numero2');
+
+    const operacion = operacionInput.value;
+    const numero1 = parseFloat(numero1Input.value);
+    const numero2 = parseFloat(numero2Input.value);
+
     if (isNaN(numero1) || isNaN(numero2)) {
-        alert("Por favor, ingrese números válidos.");
-        continue;
+        Swal.fire('Error', 'Por favor, ingrese números válidos.', 'error');
+        return;
     }
 
     let resultado = calcular(operacion, numero1, numero2);
 
     if (isNaN(resultado)) {
-        alert("Operación inválida. Por favor, ingrese un operador válido (+, -, *, /).");
-        continue;
+        Swal.fire('Error', 'Operación inválida. Por favor, ingrese un operador válido (+, -, *, /).', 'error');
+        return;
     }
 
-    alert("El resultado es: " + resultado);
+    Swal.fire('Resultado', 'El resultado es: ' + resultado, 'success');
 
     let calculo = numero1 + " " + operacion + " " + numero2 + " = " + resultado;
-    historial.push(calculo); // Agrega el cálculo al historial
+    historial.push(calculo);
 
-    document.write("<p>Historial de cálculos:</p>");
-    document.write("<ul>");
+    const historialElement = document.getElementById('historial');
+    historialElement.innerHTML = '';
+
+    const historialList = document.createElement('ul');
     historial.forEach(function (calculo) {
-        document.write("<li>" + calculo + "</li>");
+        const calculoItem = document.createElement('li');
+        calculoItem.textContent = calculo;
+        historialList.appendChild(calculoItem);
     });
-    document.write("</ul>");
 
-    // Pregunta al usuario si desea hacer otra operación
-    let opcion = prompt("¿Desea realizar otra operación? (si/no)");
-    if (opcion.toLowerCase() !== "si") {
-        break; // Sale del ciclo
-    }
-} while (true);
+    historialElement.appendChild(historialList);
+
+    operacionInput.value = '';
+    numero1Input.value = '';
+    numero2Input.value = '';
+}
