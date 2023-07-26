@@ -14,11 +14,11 @@ function calcular(operador, num1, num2) {
 }
 
 function guardarHistorialEnStorage(historial) {
-    sessionStorage.setItem('historialCalculos', JSON.stringify(historial));
+    localStorage.setItem('historialCalculos', JSON.stringify(historial));
 }
 
 function obtenerHistorialDesdeStorage() {
-    const historialJSON = sessionStorage.getItem('historialCalculos');
+    const historialJSON = localStorage.getItem('historialCalculos');
     if (historialJSON) {
         return JSON.parse(historialJSON);
     }
